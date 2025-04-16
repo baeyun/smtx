@@ -1,0 +1,20 @@
+{
+  "name": "smtt",
+  "version": "0.1.0",
+  "main": "main.ts",
+  "scripts": {
+    "start": "node --import=tsx main.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "baeyun",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ts-morph": "^25.0.1",
+    "typescript": "^5.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3"
+  }
+}
