@@ -6,18 +6,20 @@ import (
 	"os"
 
 	"github.com/smtx/smtv/utils"
+	ts "github.com/tree-sitter/go-tree-sitter"
 )
 
 type Source struct {
-	Path string
-	Src  *os.File
-	Ast  *ast.File
+	Path   string
+	Src    []byte
+	PreAst *ts.Tree
+	Ast    *ast.File
 }
 
 func NewSource(filename string, parser *func(*Source)) *Source {
 	var src = &Source{
 		Path: filename,
-		Src:  utils.ReadFile(filename),
+		Src:  utils.ReadFileBytes(filename),
 		Ast:  nil,
 	}
 

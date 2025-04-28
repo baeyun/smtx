@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"bytes"
 	"fmt"
 
 	"github.com/alecthomas/participle/v2"
@@ -59,10 +60,14 @@ var (
 
 // @TODO add Syntax/Railroad Diagrams
 func ParticleParser(src *Source) {
-	toml, err := TomlParser.Parse(src.Path, src.Src)
+	toml, err := TomlParser.Parse(src.Path, bytes.NewReader(src.Src))
 	if err != nil {
 		fmt.Printf("Error parsing file %s: %v\n", src.Path, err)
 		return
 	}
-	repr.Println(toml)
+	repr.String(toml)
+	// repr.Println(toml)
+
+	// We're no longer using the parsed result, but you can access it like this:
+	// src.PreAst = toml
 }

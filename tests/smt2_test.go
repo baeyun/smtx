@@ -1,4 +1,4 @@
-package prelude_test
+package smtv_test
 
 import (
 	"testing"

@@ -10,17 +10,20 @@ import (
 // ReadFile opens a file and returns its content as a byte slice.
 // Remember to close the file after use.
 func ReadFile(filename string) *os.File {
-	// data, err := os.ReadFile(filename)
-	// if err != nil {
-	// 	fmt.Printf("Error opening file %s: %v\n", filename, err)
-	// }
-	// return data
 	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Printf("Error opening file %s: %v\n", filename, err)
 	}
 	// defer file.Close()
 	return file
+}
+
+func ReadFileBytes(filename string) []byte {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		fmt.Printf("Error opening file %s: %v\n", filename, err)
+	}
+	return data
 }
 
 // @TODO improve matching of files
