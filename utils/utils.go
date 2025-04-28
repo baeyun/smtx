@@ -7,8 +7,25 @@ import (
 	"strings"
 )
 
-func GetFilesToCheck(files []string) []string {
-	var matches []string
+// ReadFile opens a file and returns its content as a byte slice.
+// Remember to close the file after use.
+func ReadFile(filename string) *os.File {
+	// data, err := os.ReadFile(filename)
+	// if err != nil {
+	// 	fmt.Printf("Error opening file %s: %v\n", filename, err)
+	// }
+	// return data
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Printf("Error opening file %s: %v\n", filename, err)
+	}
+	// defer file.Close()
+	return file
+}
+
+// @TODO improve matching of files
+func GetFilesToCheck(files []string) []*string {
+	var matches []*string
 	for _, filepath := range files {
 		// if the path is a glob
 		if strings.Contains(filepath, "*") {
@@ -16,9 +33,11 @@ func GetFilesToCheck(files []string) []string {
 			if err != nil {
 				fmt.Println("Error:", err)
 			}
-			matches = append(matches, glob...)
+			for _, g := range glob {
+				matches = append(matches, &g)
+			}
 		} else {
-			matches = append(matches, filepath)
+			matches = append(matches, &filepath)
 		}
 	}
 	return matches

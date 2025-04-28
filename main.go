@@ -1,12 +1,17 @@
 package main
 
 import (
-	"fmt"
-
+	"github.com/smtx/smtv/parser"
 	"github.com/smtx/smtv/utils"
 
 	arg "github.com/alexflint/go-arg"
 )
+
+// #include <stdio.h>
+// void hello() {
+//    printf("Hello from C")
+//}
+import "C"
 
 // Command line arguments parser
 var CmdArgs struct {
@@ -16,11 +21,10 @@ var CmdArgs struct {
 
 func main() {
 	arg.MustParse(&CmdArgs)
+	filenames := utils.GetFilesToCheck(CmdArgs.Files)
+	// particle := parser.TreeSitterParser
+	particle := parser.ParticleParser
+	parser.NewSourceList(filenames, &particle)
 
-	// @TODO improve matching of files
-	files := utils.GetFilesToCheck(CmdArgs.Files)
-
-	for _, file := range files {
-		fmt.Println(file)
-	}
+	C.hello()
 }

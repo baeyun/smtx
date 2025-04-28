@@ -1,15 +1,43 @@
 package parser
 
-import "go/ast"
+import (
+	"fmt"
+	"go/ast"
+	"os"
+
+	"github.com/smtx/smtv/utils"
+)
 
 type Source struct {
-	source string
-	ast    ast.File
+	Path string
+	Src  *os.File
+	Ast  *ast.File
 }
 
-func NewSource(source string, ast ast.File) *Source {
-	return &Source{
-		source: source,
-		ast:    ast,
+func NewSource(filename string, parser *func(*Source)) *Source {
+	var src = &Source{
+		Path: filename,
+		Src:  utils.ReadFile(filename),
+		Ast:  nil,
 	}
+
+	if parser != nil {
+		(*parser)(src)
+	}
+	return src
+}
+
+func NewSourceList(filenames []*string, parser *func(*Source)) []*Source {
+	var sources []*Source
+	for _, filename := range filenames {
+		r, err := os.Open(*filename)
+		if err != nil {
+			fmt.Printf("Error opening file %s: %v\n", *filename, err)
+			continue
+		}
+		defer r.Close()
+
+		sources = append(sources, NewSource(*filename, parser))
+	}
+	return sources
 }
