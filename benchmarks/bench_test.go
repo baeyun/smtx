@@ -3,27 +3,49 @@ package benchmarks
 import (
 	"testing"
 
+	ast "github.com/smtx/smtv/ast"
 	p "github.com/smtx/smtv/parser"
+	types "github.com/smtx/smtv/types"
 )
 
-func BenchmarkParsers(b *testing.B) {
-	tomlTestFile := "../tests/sample.toml"
-	filenames := []*string{&tomlTestFile}
-	b.Run("TreeSitter", func(b *testing.B) {
-		parser := p.TreeSitterParserToml
+func BenchmarkTypeChecking(b *testing.B) {
+	b.Run("TypeChecker", func(b *testing.B) {
+		gosf := ast.BuildGoSourceFile("../tests/hello.go")
 		b.ReportAllocs()
 
 		for b.Loop() {
-			p.NewSourceList(filenames, &parser)
+			types.TypeCheckSourceFile(gosf)
 		}
 	})
 
-	b.Run("Particle", func(b *testing.B) {
-		parser := p.ParticleParser
+	b.Run("TypeCheckerPlusSourceBuilder", func(b *testing.B) {
 		b.ReportAllocs()
 
 		for b.Loop() {
-			p.NewSourceList(filenames, &parser)
+			gosf := ast.BuildGoSourceFile("../tests/hello.go")
+			types.TypeCheckSourceFile(gosf)
+		}
+	})
+}
+
+func BenchmarkParsers(b *testing.B) {
+	testFile := "../tests/sample.toml"
+	filenames := []*string{&testFile}
+	b.Run("TreeSitter", func(b *testing.B) {
+		parser := p.NewTreeSitterParserToml
+		b.ReportAllocs()
+
+		for b.Loop() {
+			ast.BuildSourceFileList(filenames, &parser)
+		}
+	})
+
+	b.Run("Participle", func(b *testing.B) {
+		parser := p.NewParticipleParser
+		b.ReportAllocs()
+
+		for b.Loop() {
+			ast.BuildSourceFileList(filenames, &parser)
 		}
 	})
 

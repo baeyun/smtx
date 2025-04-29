@@ -1,45 +1,44 @@
 package parser
 
 import (
-	"fmt"
-	"go/ast"
-	"os"
+	"unsafe"
 
-	"github.com/smtx/smtv/utils"
+	ts_toml "github.com/tree-sitter-grammars/tree-sitter-toml/bindings/go"
 	ts "github.com/tree-sitter/go-tree-sitter"
+
+	ast "github.com/smtx/smtv/ast"
 )
 
-type Source struct {
-	Path   string
-	Src    []byte
-	PreAst *ts.Tree
-	Ast    *ast.File
+// #cgo LDFLAGS: -Wl,--allow-multiple-definition
+// #cgo CFLAGS: -std=c11 -fPIC
+// #include "./parser.c"
+import "C"
+
+// Get the tree-sitter Language for this grammar.
+func Language() unsafe.Pointer {
+	return unsafe.Pointer(C.tree_sitter_smtlib2())
 }
 
-func NewSource(filename string, parser *func(*Source)) *Source {
-	var src = &Source{
-		Path: filename,
-		Src:  utils.ReadFileBytes(filename),
-		Ast:  nil,
-	}
+// @IMPORTANT: Close the *ts.Tree after use to avoid memory leaks.
+func NewTreeSitterParser(sf *ast.SourceFile) {
+	parser := ts.NewParser()
+	defer parser.Close()
+	parser.SetLanguage(ts.NewLanguage(Language()))
 
-	if parser != nil {
-		(*parser)(src)
-	}
-	return src
+	tree := parser.Parse(sf.Src, nil)
+	// defer tree.Close()
+
+	sf.Parser = tree
 }
 
-func NewSourceList(filenames []*string, parser *func(*Source)) []*Source {
-	var sources []*Source
-	for _, filename := range filenames {
-		r, err := os.Open(*filename)
-		if err != nil {
-			fmt.Printf("Error opening file %s: %v\n", *filename, err)
-			continue
-		}
-		defer r.Close()
+// @IMPORTANT: Close the *ts.Tree after use to avoid memory leaks.
+func NewTreeSitterParserToml(sf *ast.SourceFile) {
+	parser := ts.NewParser()
+	defer parser.Close()
+	parser.SetLanguage(ts.NewLanguage(ts_toml.Language()))
 
-		sources = append(sources, NewSource(*filename, parser))
-	}
-	return sources
+	tree := parser.Parse(sf.Src, nil)
+	// defer tree.Close()
+
+	sf.Parser = tree
 }

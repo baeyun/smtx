@@ -7,7 +7,22 @@ import (
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
 	"github.com/alecthomas/repr"
+
+	ast "github.com/smtx/smtv/ast"
 )
+
+func NewParticipleParser(sf *ast.SourceFile) {
+	toml, err := TomlParser.Parse(sf.Path, bytes.NewReader(sf.Src))
+	if err != nil {
+		fmt.Printf("Error parsing file %s: %v\n", sf.Path, err)
+		return
+	}
+	repr.String(toml)
+	// repr.Println(toml)
+
+	// We're no longer using the parsed result, but you can access it like this:
+	// sf.PreAst = toml
+}
 
 type TOML struct {
 	Pos lexer.Position
@@ -57,17 +72,3 @@ var (
 		participle.Unquote("String"),
 	)
 )
-
-// @TODO add Syntax/Railroad Diagrams
-func ParticleParser(src *Source) {
-	toml, err := TomlParser.Parse(src.Path, bytes.NewReader(src.Src))
-	if err != nil {
-		fmt.Printf("Error parsing file %s: %v\n", src.Path, err)
-		return
-	}
-	repr.String(toml)
-	// repr.Println(toml)
-
-	// We're no longer using the parsed result, but you can access it like this:
-	// src.PreAst = toml
-}

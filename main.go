@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
-
-	p "github.com/smtx/smtv/parser"
-	"github.com/smtx/smtv/utils"
+	"log"
 
 	arg "github.com/alexflint/go-arg"
+
+	ast "github.com/smtx/smtv/ast"
+	parser "github.com/smtx/smtv/parser"
+	types "github.com/smtx/smtv/types"
+	"github.com/smtx/smtv/utils"
 )
 
 // Command line arguments parser
@@ -18,14 +21,25 @@ var CmdArgs struct {
 func main() {
 	arg.MustParse(&CmdArgs)
 	filenames := utils.GetFilesToCheck(CmdArgs.Files)
-	parser := p.TreeSitterParser
-	sources := p.NewSourceList(filenames, &parser)
+	parser := parser.NewTreeSitterParser
+	sources := ast.BuildSourceFileList(filenames, &parser)
 
-	for _, src := range sources {
-		root := src.PreAst.RootNode()
-		// fmt.Println(root.Kind())
-		fmt.Println(root.ToSexp())
+	gosf := ast.BuildGoSourceFile("./tests/hello.go")
+	ast.PrintSourceFile(gosf)
+	pkg, err := types.TypeCheckSourceFile(gosf)
+	if err != nil {
+		log.Fatal(err) // type error
+	}
 
-		defer src.PreAst.Close()
+	fmt.Printf("Package  %q\n", pkg.Path())
+	fmt.Printf("Name:    %s\n", pkg.Name())
+	fmt.Printf("Imports: %s\n", pkg.Imports())
+	fmt.Printf("Scope:   %s\n", pkg.Scope())
+
+	for _, sf := range sources {
+		// ast.PrettyPrintParser(sf)
+
+		// prevent leaks
+		defer sf.Parser.Close()
 	}
 }
