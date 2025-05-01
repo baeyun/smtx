@@ -1,4 +1,4 @@
-package ast
+package compiler
 
 import (
 	"fmt"
@@ -6,13 +6,15 @@ import (
 	"go/token"
 	"os"
 
+	"github.com/smtx/smtv/ast"
 	"github.com/smtx/smtv/utils"
 )
 
-func BuildSourceFile(filename string, parser *func(*SourceFile)) *SourceFile {
-	src := &SourceFile{
-		Path: filename,
-		Src:  utils.ReadFileBytes(filename),
+// @TODO: use: https://pkg.go.dev/golang.org/x/tools/go/ast/astutil
+
+func BuildSourceFile(filename string, parser *func(*ast.SourceFile)) *ast.SourceFile {
+	src := &ast.SourceFile{
+		Src: utils.ReadFileBytes(filename),
 	}
 
 	if parser != nil {
@@ -21,8 +23,8 @@ func BuildSourceFile(filename string, parser *func(*SourceFile)) *SourceFile {
 	return src
 }
 
-func BuildSourceFileList(filenames []*string, parser *func(*SourceFile)) []*SourceFile {
-	var sources []*SourceFile
+func BuildSourceFileList(filenames []*string, parser *func(*ast.SourceFile)) []*ast.SourceFile {
+	var sources []*ast.SourceFile
 	for _, filename := range filenames {
 		r, err := os.Open(*filename)
 		if err != nil {
@@ -36,15 +38,14 @@ func BuildSourceFileList(filenames []*string, parser *func(*SourceFile)) []*Sour
 	return sources
 }
 
-func BuildGoSourceFile(filename string) *SourceFile {
+func BuildGoSourceFile(filename string) *ast.SourceFile {
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, filename, nil, 0)
 	if err != nil {
 		panic(fmt.Sprintf("Error parsing file %s: %v", filename, err))
 	}
 
-	return &SourceFile{
-		Path: filename,
+	return &ast.SourceFile{
 		Fset: fset,
 		Ast:  f,
 	}

@@ -12,9 +12,9 @@ import (
 )
 
 func NewParticipleParser(sf *ast.SourceFile) {
-	toml, err := TomlParser.Parse(sf.Path, bytes.NewReader(sf.Src))
+	toml, err := TomlParser.Parse("", bytes.NewReader(sf.Src))
 	if err != nil {
-		fmt.Printf("Error parsing file %s: %v\n", sf.Path, err)
+		fmt.Printf("Parse error: %v\n", err)
 		return
 	}
 	repr.String(toml)

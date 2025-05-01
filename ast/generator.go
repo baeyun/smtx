@@ -3,6 +3,7 @@ package ast
 import (
 	"bytes"
 	"fmt"
+	"go/ast"
 	"go/printer"
 
 	"github.com/smtx/smtv/utils"
@@ -16,15 +17,24 @@ func Generate(sf *SourceFile) string {
 }
 
 func GenerateFile(sf *SourceFile, filename *string) {
-	if filename == nil {
-		filename = &sf.Path
-	}
+	// @TODO: fix this
+	// if filename == nil {
+	// 	filename = &sf.Path
+	// }
 
 	sourceCode := Generate(sf)
 	err := utils.WriteFileBytes(*filename, []byte(sourceCode))
 	if err != nil {
 		panic(err)
 	}
+}
+
+func PrintAst(sf *SourceFile) {
+	if sf.Ast == nil {
+		panic("AST is nil")
+	}
+
+	ast.Print(sf.Fset, sf.Ast)
 }
 
 func PrintSourceFile(sf *SourceFile) {

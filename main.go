@@ -1,40 +1,45 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"os"
 
 	arg "github.com/alexflint/go-arg"
 
-	ast "github.com/smtx/smtv/ast"
-	parser "github.com/smtx/smtv/parser"
-	types "github.com/smtx/smtv/types"
+	"github.com/smtx/smtv/ast"
+	"github.com/smtx/smtv/compiler"
+	"github.com/smtx/smtv/parser"
+	"github.com/smtx/smtv/types"
 	"github.com/smtx/smtv/utils"
 )
 
 // Command line arguments parser
 var CmdArgs struct {
-	Files   []string `arg:"positional,required" help:"List of files to check. Supports glob patterns."`
+	Files   []string `arg:"positional" help:"List of files to check. Supports glob patterns."`
+	Ast     bool     `arg:"-a,--ast" help:"Print the AST of the ast.go test file."`
 	Verbose bool     `arg:"-v,--verbose" help:"Enable detailed output for debugging or analysis."`
 }
 
 func main() {
 	arg.MustParse(&CmdArgs)
+
+	// Print the AST of the ast.go test file
+	if CmdArgs.Ast {
+		ast_test := compiler.BuildGoSourceFile("./tests/ast.go")
+		ast.PrintAst(ast_test)
+		os.Exit(0)
+	}
+
 	filenames := utils.GetFilesToCheck(CmdArgs.Files)
 	parser := parser.NewTreeSitterParser
-	sources := ast.BuildSourceFileList(filenames, &parser)
-
-	gosf := ast.BuildGoSourceFile("./tests/hello.go")
-	ast.PrintSourceFile(gosf)
-	pkg, err := types.TypeCheckSourceFile(gosf)
+	sources := compiler.BuildSourceFileList(filenames, &parser)
+	gosf := compiler.BuildGoSourceFile("./tests/hello.go")
+	// ast.PrintAst(gosf)
+	// ast.PrintSourceFile(gosf)
+	_, err := types.CheckSourceFile(gosf)
 	if err != nil {
 		log.Fatal(err) // type error
 	}
-
-	fmt.Printf("Package  %q\n", pkg.Path())
-	fmt.Printf("Name:    %s\n", pkg.Name())
-	fmt.Printf("Imports: %s\n", pkg.Imports())
-	fmt.Printf("Scope:   %s\n", pkg.Scope())
 
 	for _, sf := range sources {
 		// ast.PrettyPrintParser(sf)

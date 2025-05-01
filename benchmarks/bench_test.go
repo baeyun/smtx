@@ -3,18 +3,19 @@ package benchmarks
 import (
 	"testing"
 
-	ast "github.com/smtx/smtv/ast"
+	"github.com/smtx/smtv/compiler"
 	p "github.com/smtx/smtv/parser"
-	types "github.com/smtx/smtv/types"
+	"github.com/smtx/smtv/types"
 )
 
 func BenchmarkTypeChecking(b *testing.B) {
+	testFile := "../tests/hello.go"
 	b.Run("TypeChecker", func(b *testing.B) {
-		gosf := ast.BuildGoSourceFile("../tests/hello.go")
+		gosf := compiler.BuildGoSourceFile(testFile)
 		b.ReportAllocs()
 
 		for b.Loop() {
-			types.TypeCheckSourceFile(gosf)
+			types.CheckSourceFile(gosf)
 		}
 	})
 
@@ -22,8 +23,8 @@ func BenchmarkTypeChecking(b *testing.B) {
 		b.ReportAllocs()
 
 		for b.Loop() {
-			gosf := ast.BuildGoSourceFile("../tests/hello.go")
-			types.TypeCheckSourceFile(gosf)
+			gosf := compiler.BuildGoSourceFile(testFile)
+			types.CheckSourceFile(gosf)
 		}
 	})
 }
@@ -36,7 +37,7 @@ func BenchmarkParsers(b *testing.B) {
 		b.ReportAllocs()
 
 		for b.Loop() {
-			ast.BuildSourceFileList(filenames, &parser)
+			compiler.BuildSourceFileList(filenames, &parser)
 		}
 	})
 
@@ -45,7 +46,7 @@ func BenchmarkParsers(b *testing.B) {
 		b.ReportAllocs()
 
 		for b.Loop() {
-			ast.BuildSourceFileList(filenames, &parser)
+			compiler.BuildSourceFileList(filenames, &parser)
 		}
 	})
 
