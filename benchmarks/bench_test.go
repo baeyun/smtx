@@ -30,7 +30,7 @@ func BenchmarkTypeChecking(b *testing.B) {
 }
 
 func BenchmarkParsers(b *testing.B) {
-	testFile := "../tests/sample.toml"
+	testFile := "./sample.toml"
 	filenames := []*string{&testFile}
 	b.Run("TreeSitter", func(b *testing.B) {
 		parser := p.NewTreeSitterParserToml

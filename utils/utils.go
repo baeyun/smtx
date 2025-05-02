@@ -1,13 +1,14 @@
 package utils
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-// ReadFile opens a file and returns its content as a byte slice.
+// Read file as a byte slice.
 // Remember to close the file after use.
 func ReadFile(filename string) *os.File {
 	file, err := os.Open(filename)
@@ -26,8 +27,7 @@ func ReadFileBytes(filename string) []byte {
 	return data
 }
 
-// WriteFileBytes writes the given data to a file.
-// signature: WriteFileBytes(*filename, []byte(sourceCode))
+// Writes the given data to a file.
 func WriteFileBytes(filename string, data []byte) error {
 	err := os.WriteFile(filename, data, 0644)
 	if err != nil {
@@ -73,6 +73,20 @@ func FindMatchingFiles(root, pattern string) ([]string, error) {
 		return nil
 	})
 	return matches, err
+}
+
+func GetSrcStringByLine(src []byte, line int) string {
+	if len(src) == 0 {
+		return ""
+	}
+
+	lines := bytes.Split(src, []byte("\n"))
+
+	if line <= 0 || line > len(lines) {
+		return ""
+	}
+
+	return string(lines[line-1])
 }
 
 func PrettySExp(input string) string {

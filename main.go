@@ -7,7 +7,7 @@ import (
 	arg "github.com/alexflint/go-arg"
 
 	"github.com/smtx/smtv/ast"
-	"github.com/smtx/smtv/compiler"
+	c "github.com/smtx/smtv/compiler"
 	"github.com/smtx/smtv/parser"
 	"github.com/smtx/smtv/types"
 	"github.com/smtx/smtv/utils"
@@ -23,19 +23,21 @@ var CmdArgs struct {
 func main() {
 	arg.MustParse(&CmdArgs)
 
-	// Print the AST of the ast.go test file
+	// Print the AST of the ast.go test file.
 	if CmdArgs.Ast {
-		ast_test := compiler.BuildGoSourceFile("./tests/ast.go")
+		ast_test := c.BuildGoSourceFile("./tests/ast.go")
 		ast.PrintAst(ast_test)
 		os.Exit(0)
 	}
 
 	filenames := utils.GetFilesToCheck(CmdArgs.Files)
+	compiler := c.NewCompiler()
+	compiler.CompileScripts(filenames, nil)
 	parser := parser.NewTreeSitterParser
-	sources := compiler.BuildSourceFileList(filenames, &parser)
-	gosf := compiler.BuildGoSourceFile("./tests/hello.go")
-	// ast.PrintAst(gosf)
+	sources := c.BuildSourceFileList(filenames, &parser)
+	gosf := c.BuildGoSourceFile("./tests/hello.go")
 	// ast.PrintSourceFile(gosf)
+
 	_, err := types.CheckSourceFile(gosf)
 	if err != nil {
 		log.Fatal(err) // type error

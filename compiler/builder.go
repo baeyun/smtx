@@ -45,8 +45,9 @@ func BuildGoSourceFile(filename string) *ast.SourceFile {
 		panic(fmt.Sprintf("Error parsing file %s: %v", filename, err))
 	}
 
-	return &ast.SourceFile{
-		Fset: fset,
-		Ast:  f,
-	}
+	sf := BuildSourceFile(filename, nil)
+	sf.Fset = fset
+	sf.Ast = f
+
+	return sf
 }
