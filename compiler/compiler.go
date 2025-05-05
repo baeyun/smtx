@@ -55,17 +55,15 @@ func NewCompiler() *Compiler {
 	}
 }
 
-func (c *Compiler) CompileScripts(files []*string, config *Config) {
-	pkg := &Compiler{
-		Config: config,
-		Fset:   token.NewFileSet(),
-	}
-
-	for _, sf := range pkg.Files {
-		CompileSourceFile(sf)
+func (c *Compiler) CompileScripts(filepaths []*string, config *Config) {
+	// @TODO: run in parallel
+	for _, f := range filepaths {
+		CompileSourceFile(f)
 	}
 
 }
+
+func CompileSourceFile(filename *string) {}
 
 func (c *Compiler) AddFile(filename string) {
 	sf := BuildSourceFile(filename, nil)
@@ -76,5 +74,3 @@ func (c *Compiler) AddFiles(filename string) {
 	sf := BuildSourceFile(filename, nil)
 	c.Files = append(c.Files, sf)
 }
-
-func CompileSourceFile(sf *ast.SourceFile) {}
