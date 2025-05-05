@@ -3,8 +3,8 @@ package smtv_test
 import (
 	"testing"
 
-	. "github.com/smtx/smtv/logics/QF_LIA"
-	. "github.com/smtx/smtv/prelude"
+	. "github.com/smtx/logics/QF_LIA"
+	. "github.com/smtx/prelude"
 )
 
 func TestMain(m *testing.M) {

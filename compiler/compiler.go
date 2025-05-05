@@ -3,7 +3,7 @@ package compiler
 import (
 	"go/token"
 
-	"github.com/smtx/smtv/ast"
+	"github.com/smtx/ast"
 )
 
 /**

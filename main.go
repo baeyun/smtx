@@ -6,11 +6,11 @@ import (
 
 	arg "github.com/alexflint/go-arg"
 
-	"github.com/smtx/smtv/ast"
-	c "github.com/smtx/smtv/compiler"
-	"github.com/smtx/smtv/parser"
-	"github.com/smtx/smtv/types"
-	"github.com/smtx/smtv/utils"
+	"github.com/smtx/ast"
+	c "github.com/smtx/compiler"
+	"github.com/smtx/parser"
+	"github.com/smtx/types"
+	"github.com/smtx/utils"
 )
 
 // Command line arguments parser

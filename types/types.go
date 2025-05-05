@@ -4,8 +4,8 @@ import (
 	"go/importer"
 	"go/types"
 
-	"github.com/smtx/smtv/ast"
-	"github.com/smtx/smtv/utils"
+	"github.com/smtx/ast"
+	"github.com/smtx/utils"
 )
 
 func CheckSourceFile(sf *ast.SourceFile) (*types.Package, error) {

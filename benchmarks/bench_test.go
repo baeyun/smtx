@@ -3,9 +3,9 @@ package benchmarks
 import (
 	"testing"
 
-	"github.com/smtx/smtv/compiler"
-	p "github.com/smtx/smtv/parser"
-	"github.com/smtx/smtv/types"
+	"github.com/smtx/compiler"
+	p "github.com/smtx/parser"
+	"github.com/smtx/types"
 )
 
 func BenchmarkTypeChecking(b *testing.B) {

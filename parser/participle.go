@@ -8,7 +8,7 @@ import (
 	"github.com/alecthomas/participle/v2/lexer"
 	"github.com/alecthomas/repr"
 
-	ast "github.com/smtx/smtv/ast"
+	ast "github.com/smtx/ast"
 )
 
 func NewParticipleParser(sf *ast.SourceFile) {

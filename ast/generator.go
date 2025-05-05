@@ -6,7 +6,7 @@ import (
 	"go/ast"
 	"go/printer"
 
-	"github.com/smtx/smtv/utils"
+	"github.com/smtx/utils"
 )
 
 func Generate(sf *SourceFile) string {

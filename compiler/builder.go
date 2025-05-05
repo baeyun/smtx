@@ -6,8 +6,8 @@ import (
 	"go/token"
 	"os"
 
-	"github.com/smtx/smtv/ast"
-	"github.com/smtx/smtv/utils"
+	"github.com/smtx/ast"
+	"github.com/smtx/utils"
 )
 
 // @TODO: use: https://pkg.go.dev/golang.org/x/tools/go/ast/astutil

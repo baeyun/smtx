@@ -7,7 +7,7 @@ Environment:
 ```bash
 goos: linux
 goarch: amd64
-pkg: github.com/smtx/smtv/benchmarks
+pkg: github.com/smtx/benchmarks
 cpu: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx
 ```
 

@@ -6,7 +6,7 @@ import (
 	ts_toml "github.com/tree-sitter-grammars/tree-sitter-toml/bindings/go"
 	ts "github.com/tree-sitter/go-tree-sitter"
 
-	ast "github.com/smtx/smtv/ast"
+	ast "github.com/smtx/ast"
 )
 
 // #cgo LDFLAGS: -Wl,--allow-multiple-definition
