@@ -5,7 +5,6 @@ import (
 	"go/types"
 
 	"github.com/smtx/ast"
-	"github.com/smtx/utils"
 )
 
 func CheckSourceFile(sf *ast.SourceFile) (*types.Package, error) {
@@ -15,10 +14,10 @@ func CheckSourceFile(sf *ast.SourceFile) (*types.Package, error) {
 	conf := types.Config{Importer: importer.Default()}
 
 	// great for debugging
-	pos := sf.Fset.Position(95)
+	// pos := sf.Fset.Position(95)
 
-	print(utils.FormatError(&sf.Src, &pos, "unknown identifier declared"))
-	print(utils.FormatWarning(&sf.Src, &pos, "unused identifier declared"))
+	// print(utils.FormatError(&sf.Src, &pos, "unknown identifier declared"))
+	// print(utils.FormatWarning(&sf.Src, &pos, "unused identifier declared"))
 
 	// Type-check the package containing only file sf.Ast.
 	// Check returns a *types.Package.

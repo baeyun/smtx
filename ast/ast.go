@@ -8,7 +8,8 @@ import (
 )
 
 type SourceFile struct {
-	Src    []byte
+	Src []byte
+	// reference to Compiler.Fset
 	Fset   *token.FileSet
 	Ast    *ast.File
 	Parser *ts.Tree

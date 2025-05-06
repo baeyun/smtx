@@ -8,7 +8,6 @@ import (
 
 	"github.com/smtx/ast"
 	c "github.com/smtx/compiler"
-	"github.com/smtx/parser"
 	"github.com/smtx/types"
 	"github.com/smtx/utils"
 )
@@ -33,8 +32,7 @@ func main() {
 	filenames := utils.GetFilesToCheck(CmdArgs.Files)
 	compiler := c.NewCompiler()
 	compiler.CompileScripts(filenames, nil)
-	parser := parser.NewTreeSitterParser
-	sources := c.BuildSourceFileList(filenames, &parser)
+	sources := c.BuildSourceFileList(filenames)
 	gosf := c.BuildGoSourceFile("./tests/hello.go")
 	// ast.PrintSourceFile(gosf)
 

@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/smtx/compiler"
-	p "github.com/smtx/parser"
 	"github.com/smtx/types"
 )
 
@@ -29,25 +28,25 @@ func BenchmarkTypeChecking(b *testing.B) {
 	})
 }
 
-func BenchmarkParsers(b *testing.B) {
-	testFile := "./sample.toml"
-	filenames := []*string{&testFile}
-	b.Run("TreeSitter", func(b *testing.B) {
-		parser := p.NewTreeSitterParserToml
-		b.ReportAllocs()
+// func BenchmarkParsers(b *testing.B) {
+// 	testFile := "./sample.toml"
+// 	filenames := []*string{&testFile}
+// 	b.Run("TreeSitter", func(b *testing.B) {
+// 		parser := p.NewParserToml
+// 		b.ReportAllocs()
 
-		for b.Loop() {
-			compiler.BuildSourceFileList(filenames, &parser)
-		}
-	})
+// 		for b.Loop() {
+// 			compiler.BuildSourceFileList(filenames, &parser)
+// 		}
+// 	})
 
-	b.Run("Participle", func(b *testing.B) {
-		parser := p.NewParticipleParser
-		b.ReportAllocs()
+// 	b.Run("Participle", func(b *testing.B) {
+// 		parser := p.NewParticipleParser
+// 		b.ReportAllocs()
 
-		for b.Loop() {
-			compiler.BuildSourceFileList(filenames, &parser)
-		}
-	})
+// 		for b.Loop() {
+// 			compiler.BuildSourceFileList(filenames, &parser)
+// 		}
+// 	})
 
-}
+// }

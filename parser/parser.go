@@ -20,19 +20,19 @@ func Language() unsafe.Pointer {
 }
 
 // @IMPORTANT: Close the *ts.Tree after use to avoid memory leaks.
-func NewTreeSitterParser(sf *ast.SourceFile) {
+func NewParser(src []byte) *ts.Tree {
 	parser := ts.NewParser()
 	defer parser.Close()
 	parser.SetLanguage(ts.NewLanguage(Language()))
 
-	tree := parser.Parse(sf.Src, nil)
+	tree := parser.Parse(src, nil)
 	// defer tree.Close()
 
-	sf.Parser = tree
+	return tree
 }
 
 // @IMPORTANT: Close the *ts.Tree after use to avoid memory leaks.
-func NewTreeSitterParserToml(sf *ast.SourceFile) {
+func NewParserToml(sf *ast.SourceFile) {
 	parser := ts.NewParser()
 	defer parser.Close()
 	parser.SetLanguage(ts.NewLanguage(ts_toml.Language()))
@@ -41,4 +41,16 @@ func NewTreeSitterParserToml(sf *ast.SourceFile) {
 	// defer tree.Close()
 
 	sf.Parser = tree
+}
+
+func WalkParser(node *ts.Node, callback func(node *ts.Node)) {
+	cursor := node.Walk()
+
+	for _, node := range cursor.Node().Children(cursor) {
+		callback(&node)
+
+		if node.ChildCount() > 0 {
+			WalkParser(&node, callback)
+		}
+	}
 }

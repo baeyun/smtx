@@ -1,4 +1,4 @@
-package utils
+package compiler
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
+	"github.com/smtx/utils"
 )
 
 // Output will look like:
@@ -21,7 +22,7 @@ func FormatDiagnostic(src *[]byte, pos *token.Position, msg string, isWarning bo
 	if isWarning {
 		sb.WriteString(color.YellowString("warning"))
 	} else {
-		sb.WriteString(color.RedString("error"))
+		sb.WriteString(color.RedString("syntax error"))
 	}
 	sb.WriteString(fmt.Sprintf(": %s\n", msg))
 
@@ -30,7 +31,7 @@ func FormatDiagnostic(src *[]byte, pos *token.Position, msg string, isWarning bo
 
 	// Line numbers and markers
 	sb.WriteString(fmt.Sprintf("   %d | ", pos.Line))
-	sb.WriteString(fmt.Sprintf("%s\n", GetSrcStringByLine(*src, pos.Line)))
+	sb.WriteString(fmt.Sprintf("%s\n", utils.GetSrcStringByLine(*src, pos.Line)))
 	sb.WriteString(fmt.Sprintf("   %d | ", pos.Line))
 	sb.WriteString(strings.Repeat(" ", pos.Column-1))
 
