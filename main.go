@@ -24,7 +24,7 @@ func main() {
 
 	// Print the AST of the ast.go test file.
 	if CmdArgs.Ast {
-		ast_test := c.BuildGoSourceFile("./tests/ast.go")
+		ast_test := c.BuildGoSourceFile("./tests/_ast.go")
 		ast.PrintAst(ast_test)
 		os.Exit(0)
 	}
@@ -33,7 +33,7 @@ func main() {
 	compiler := c.NewCompiler()
 	compiler.CompileScripts(filenames, nil)
 	sources := c.BuildSourceFileList(filenames)
-	gosf := c.BuildGoSourceFile("./tests/hello.go")
+	gosf := c.BuildGoSourceFile("./tests/_ast.go")
 	// ast.PrintSourceFile(gosf)
 
 	_, err := types.CheckSourceFile(gosf)

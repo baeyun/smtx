@@ -30,8 +30,9 @@ func FormatDiagnostic(src *[]byte, pos *token.Position, msg string, isWarning bo
 	sb.WriteString(color.BlueString(fmt.Sprintf("  --> %s\n", pos)))
 
 	// Line numbers and markers
+	sourcePoint := utils.GetSrcStringByLine(*src, pos.Line)
 	sb.WriteString(fmt.Sprintf("   %d | ", pos.Line))
-	sb.WriteString(fmt.Sprintf("%s\n", utils.GetSrcStringByLine(*src, pos.Line)))
+	sb.WriteString(fmt.Sprintf("%s\n", sourcePoint))
 	sb.WriteString(fmt.Sprintf("   %d | ", pos.Line))
 	sb.WriteString(strings.Repeat(" ", pos.Column-1))
 

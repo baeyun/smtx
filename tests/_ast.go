@@ -1,4 +1,4 @@
-package smtv
+package smtv_test
 
 import (
 	"fmt"
