@@ -13,12 +13,6 @@ func CheckSourceFile(sf *ast.SourceFile) (*types.Package, error) {
 	// we must specify how to deal with imports.
 	conf := types.Config{Importer: importer.Default()}
 
-	// great for debugging
-	// pos := sf.Fset.Position(95)
-
-	// print(utils.FormatError(&sf.Src, &pos, "unknown identifier declared"))
-	// print(utils.FormatWarning(&sf.Src, &pos, "unused identifier declared"))
-
 	// Type-check the package containing only file sf.Ast.
 	// Check returns a *types.Package.
 	return conf.Check("smtx", sf.Fset, []*ast.File{sf.Ast}, nil)

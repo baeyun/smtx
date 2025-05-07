@@ -41,6 +41,8 @@ func main() {
 		log.Fatal(err) // type error
 	}
 
+	println(len(sources))
+
 	for _, sf := range sources {
 		// ast.PrettyPrintParser(sf)
 
