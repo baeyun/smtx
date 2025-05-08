@@ -29,12 +29,13 @@ func GenerateFile(sf *SourceFile, filename *string) {
 	}
 }
 
-func PrintAst(sf *SourceFile) {
-	if sf.Ast == nil {
+func PrintAst(Ast *File) {
+	if Ast == nil {
 		panic("AST is nil")
 	}
 
-	ast.Print(sf.Fset, sf.Ast)
+	// @TODO add fset
+	ast.Print(nil, Ast)
 }
 
 func PrintSourceFile(sf *SourceFile) {

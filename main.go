@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	arg "github.com/alexflint/go-arg"
@@ -9,7 +9,6 @@ import (
 	"github.com/smtx/ast"
 	"github.com/smtx/compiler"
 	"github.com/smtx/config"
-	"github.com/smtx/types"
 )
 
 var CmdArgs config.CmdArgs
@@ -20,17 +19,17 @@ func main() {
 	// Print the AST of the ast.go test file.
 	if CmdArgs.Ast {
 		ast_test := compiler.BuildGoSourceFile("./tests/_ast.go")
-		ast.PrintAst(ast_test)
+		ast.PrintAst(ast_test.Ast)
 		os.Exit(0)
 	}
 
 	c := compiler.NewCompilerFromArgs(CmdArgs)
-	gosf := compiler.BuildGoSourceFile("./tests/_ast.go")
+	// gosf := compiler.BuildGoSourceFile("./tests/_ast.go")
 
-	_, err := types.CheckSourceFile(gosf)
-	if err != nil {
-		log.Fatal(err) // type error
-	}
+	// _, err := types.CheckSourceFile(gosf)
+	// if err != nil {
+	// 	log.Fatal(err) // type error
+	// }
 
-	println(len(c.Files))
+	fmt.Printf("Files: %d\n", len(c.Files))
 }

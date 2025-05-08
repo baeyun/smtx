@@ -3,6 +3,8 @@ package compiler
 import (
 	"go/token"
 
+	gast "go/ast"
+
 	ts "github.com/tree-sitter/go-tree-sitter"
 
 	"github.com/smtx/ast"
@@ -93,11 +95,15 @@ func (c *Compiler) CompileSourceFile(filename string) {
 		Src:    src,
 		Fset:   c.Fset,
 		Parser: parser.NewParser(src),
+		Ast: &ast.File{
+			Name:  new(ast.Ident),
+			Scope: gast.NewScope(nil),
+		},
 	}
+	sf.Ast.FileStart = token.Pos(0)
+	sf.Ast.FileEnd = token.Pos(len(src))
 
-	// ast.PrettyPrintParser(sf)
 	parser.WalkParser(sf.Parser.RootNode(), func(node *ts.Node) {
-		// println(node.GrammarName())
 		if node.IsError() && !node.IsExtra() {
 			start, _ := node.ByteRange()
 			tsPos := node.StartPosition()
@@ -110,6 +116,8 @@ func (c *Compiler) CompileSourceFile(filename string) {
 			print(FormatError(&sf.Src, &pos, node.ToSexp()))
 		}
 	})
+
+	ast.PrintAst(sf.Ast)
 
 	c.Files = append(c.Files, sf)
 

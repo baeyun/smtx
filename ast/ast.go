@@ -16,5 +16,6 @@ type SourceFile struct {
 }
 
 type (
-	File = ast.File
+	File  = ast.File
+	Ident = ast.Ident
 )
