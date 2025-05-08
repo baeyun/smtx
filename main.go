@@ -7,46 +7,30 @@ import (
 	arg "github.com/alexflint/go-arg"
 
 	"github.com/smtx/ast"
-	c "github.com/smtx/compiler"
+	"github.com/smtx/compiler"
+	"github.com/smtx/config"
 	"github.com/smtx/types"
-	"github.com/smtx/utils"
 )
 
-// Command line arguments parser
-var CmdArgs struct {
-	Files   []string `arg:"positional" help:"List of files to check. Supports glob patterns."`
-	Ast     bool     `arg:"-a,--ast" help:"Print the AST of the ast.go test file."`
-	Verbose bool     `arg:"-v,--verbose" help:"Enable detailed output for debugging or analysis."`
-}
+var CmdArgs config.CmdArgs
 
 func main() {
 	arg.MustParse(&CmdArgs)
 
 	// Print the AST of the ast.go test file.
 	if CmdArgs.Ast {
-		ast_test := c.BuildGoSourceFile("./tests/_ast.go")
+		ast_test := compiler.BuildGoSourceFile("./tests/_ast.go")
 		ast.PrintAst(ast_test)
 		os.Exit(0)
 	}
 
-	filenames := utils.GetFilesToCheck(CmdArgs.Files)
-	compiler := c.NewCompiler()
-	compiler.CompileScripts(filenames, nil)
-	sources := c.BuildSourceFileList(filenames)
-	gosf := c.BuildGoSourceFile("./tests/_ast.go")
-	// ast.PrintSourceFile(gosf)
+	c := compiler.NewCompilerFromArgs(CmdArgs)
+	gosf := compiler.BuildGoSourceFile("./tests/_ast.go")
 
 	_, err := types.CheckSourceFile(gosf)
 	if err != nil {
 		log.Fatal(err) // type error
 	}
 
-	println(len(sources))
-
-	for _, sf := range sources {
-		// ast.PrettyPrintParser(sf)
-
-		// prevent leaks
-		defer sf.Parser.Close()
-	}
+	println(len(c.Files))
 }

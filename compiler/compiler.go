@@ -6,6 +6,7 @@ import (
 	ts "github.com/tree-sitter/go-tree-sitter"
 
 	"github.com/smtx/ast"
+	"github.com/smtx/config"
 	"github.com/smtx/parser"
 	"github.com/smtx/utils"
 )
@@ -16,12 +17,11 @@ import (
  */
 
 type Config struct {
-	Include      []string
-	Exclude      []string
-	Logics       []string
-	Validate     bool
-	Verbose      bool
-	ShowWarnings bool
+	Include []string
+	Exclude []string
+	Logics  []string
+	Check   bool // check for type errors
+	Verbose bool
 }
 
 type DiagnosticType int
@@ -51,19 +51,35 @@ type Compiler struct {
 
 func NewCompiler() *Compiler {
 	return &Compiler{
-		// Config: &Config{
-		// 	Include:      []string{},
-		// 	Exclude:      []string{},
-		// 	Logics:       []string{},
-		// 	Validate:     false,
-		// 	Verbose:      false,
-		// 	ShowWarnings: false,
-		// },
 		Fset: token.NewFileSet(),
 	}
 }
 
-func (c *Compiler) CompileScripts(filepaths []*string, config *Config) {
+func NewCompilerFromArgs(args config.CmdArgs) *Compiler {
+	filenames := utils.GetFilesToCheck(args.Files)
+	c := &Compiler{
+		Config: &Config{
+			Include: []string{},
+			Exclude: []string{},
+			Logics:  []string{},
+			Check:   true,
+			Verbose: args.Verbose,
+		},
+		Fset: token.NewFileSet(),
+	}
+
+	c.CompileScripts(filenames)
+
+	// BuildSourceFileList(filenames)
+	// _, err := types.CheckSourceFile(gosf)
+	// if err != nil {
+	// 	log.Fatal(err) // type error
+	// }
+
+	return c
+}
+
+func (c *Compiler) CompileScripts(filepaths []*string) {
 	// @TODO: run in parallel
 	for _, f := range filepaths {
 		c.CompileSourceFile(*f)
@@ -96,4 +112,10 @@ func (c *Compiler) CompileSourceFile(filename string) {
 	})
 
 	c.Files = append(c.Files, sf)
+
+	// @TODO: !important: prevent leaks
+	// defer sf.Parser.Close()
 }
+
+// @TODO: load prelude library from logics and theories
+func (c *Compiler) LoadPrelude() {}
