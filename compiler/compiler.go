@@ -1,6 +1,7 @@
 package compiler
 
 import (
+	"fmt"
 	"go/token"
 	"log"
 
@@ -74,11 +75,9 @@ func NewCompilerFromArgs(args config.CmdArgs) *Compiler {
 
 	c.CompileScripts(filenames)
 
-	// BuildSourceFileList(filenames)
-	// _, err := types.CheckSourceFile(gosf)
-	// if err != nil {
-	// 	log.Fatal(err) // type error
-	// }
+	if args.Verbose {
+		fmt.Printf("Files: %d\n", len(c.Files))
+	}
 
 	return c
 }
@@ -108,7 +107,7 @@ func (c *Compiler) CompileSourceFile(filename string) {
 	sf.Ast.FileStart = token.Pos(0)
 	sf.Ast.FileEnd = token.Pos(len(src))
 
-	// scan parser tree for errors
+	// scan for parser errors
 	parser.WalkParser(sf.Parser.RootNode(), func(node *ts.Node) {
 		if node.IsError() && !node.IsExtra() {
 			start, _ := node.ByteRange()
@@ -143,16 +142,23 @@ func (c *Compiler) CompileSourceFile(filename string) {
 	ast.PrintAst(sf.Ast)
 	println("############################################################")
 	ast.PrintSourceFile(sf)
-	println("############################################################")
-	_, err := types.CheckSourceFile(sf)
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	c.Files = append(c.Files, sf)
 
 	// @TODO: !important: prevent leaks
 	// defer sf.Parser.Close()
+}
+
+// @TODO: check for types for all
+func (c *Compiler) CheckTypes() {
+	println("############################################################")
+	for _, sf := range c.Files {
+		_, err := types.CheckSourceFile(sf)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 }
 
 // @TODO: load prelude library from logics and theories

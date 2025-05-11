@@ -21,11 +21,9 @@ func main() {
 			os.Exit(0)
 		}
 
-		compiler.NewCompilerFromArgs(args)
-		// _, err := types.CheckSourceFile(gosf)
-		// if err != nil {
-		// 	log.Fatal(err) // type error
-		// }
+		c := compiler.NewCompilerFromArgs(args)
+		c.CheckTypes()
+
 	default:
 		argParser.WriteUsage(os.Stderr)
 	}
