@@ -5,6 +5,7 @@ import (
 	"go/types"
 
 	"github.com/smtx/ast"
+	"github.com/smtx/config"
 )
 
 func CheckSourceFile(sf *ast.SourceFile) (*types.Package, error) {
@@ -15,5 +16,5 @@ func CheckSourceFile(sf *ast.SourceFile) (*types.Package, error) {
 
 	// Type-check the package containing only file sf.Ast.
 	// Check returns a *types.Package.
-	return conf.Check("smtx", sf.Fset, []*ast.File{sf.Ast}, nil)
+	return conf.Check(config.PKGNAME, sf.Fset, []*ast.File{sf.Ast}, nil)
 }

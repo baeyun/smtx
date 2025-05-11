@@ -60,7 +60,7 @@ func NewCompiler() *Compiler {
 }
 
 func NewCompilerFromArgs(args config.CmdArgs) *Compiler {
-	filenames := utils.GetFilesToCheck(args.Files)
+	filenames := utils.GetFilesToCheck(args.Check.Files)
 	c := &Compiler{
 		Config: &Config{
 			Include: []string{},
@@ -139,7 +139,6 @@ func (c *Compiler) CompileSourceFile(filename string) {
 	sf.Ast.Decls = append(sf.Ast.Decls, mainFunc)
 
 	// BuildCommands(sf.Parser.RootNode())
-
 	// println("############################################################")
 	ast.PrintAst(sf.Ast)
 	println("############################################################")

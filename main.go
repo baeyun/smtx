@@ -13,7 +13,7 @@ import (
 var CmdArgs config.CmdArgs
 
 func main() {
-	arg.MustParse(&CmdArgs)
+	parser := arg.MustParse(&CmdArgs)
 
 	// Print the AST of the ast.go test file.
 	if CmdArgs.Ast {
@@ -22,8 +22,13 @@ func main() {
 		os.Exit(0)
 	}
 
+	if CmdArgs.Check == nil || len(CmdArgs.Check.Files) == 0 {
+		// Print usage if no files are provided
+		parser.WriteUsage(os.Stderr)
+		os.Exit(0)
+	}
+
 	compiler.NewCompilerFromArgs(CmdArgs)
-	// gosf := compiler.BuildGoSourceFile("./tests/_ast.go")
 
 	// _, err := types.CheckSourceFile(gosf)
 	// if err != nil {
