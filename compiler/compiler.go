@@ -2,6 +2,7 @@ package compiler
 
 import (
 	"go/token"
+	"log"
 
 	gast "go/ast"
 
@@ -10,6 +11,7 @@ import (
 	"github.com/smtx/ast"
 	"github.com/smtx/config"
 	"github.com/smtx/parser"
+	"github.com/smtx/types"
 	"github.com/smtx/utils"
 )
 
@@ -91,18 +93,22 @@ func (c *Compiler) CompileScripts(filepaths []*string) {
 func (c *Compiler) CompileSourceFile(filename string) {
 	src := utils.ReadFileBytes(filename)
 	c.Fset.AddFile(filename, -1, len(src))
+	pkg := ast.Ident{
+		Name: "main",
+	}
 	sf := &ast.SourceFile{
 		Src:    src,
 		Fset:   c.Fset,
 		Parser: parser.NewParser(src),
 		Ast: &ast.File{
-			Name:  new(ast.Ident),
+			Name:  &pkg,
 			Scope: gast.NewScope(nil),
 		},
 	}
 	sf.Ast.FileStart = token.Pos(0)
 	sf.Ast.FileEnd = token.Pos(len(src))
 
+	// scan parser tree for errors
 	parser.WalkParser(sf.Parser.RootNode(), func(node *ts.Node) {
 		if node.IsError() && !node.IsExtra() {
 			start, _ := node.ByteRange()
@@ -117,7 +123,32 @@ func (c *Compiler) CompileSourceFile(filename string) {
 		}
 	})
 
+	// add main function
+	mainFunc := BuildMainFunction(&ast.BlockStmt{
+		List: []ast.Stmt{
+			&ast.ExprStmt{
+				X: &ast.CallExpr{
+					Fun: &ast.Ident{
+						Name:    "foo",
+						NamePos: token.Pos(1),
+					},
+				},
+			},
+		},
+	})
+	sf.Ast.Decls = append(sf.Ast.Decls, mainFunc)
+
+	// BuildCommands(sf.Parser.RootNode())
+
+	// println("############################################################")
 	ast.PrintAst(sf.Ast)
+	println("############################################################")
+	ast.PrintSourceFile(sf)
+	println("############################################################")
+	_, err := types.CheckSourceFile(sf)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	c.Files = append(c.Files, sf)
 

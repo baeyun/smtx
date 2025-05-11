@@ -128,3 +128,8 @@ func PrettySExp(input string) string {
 	}
 	return result.String()
 }
+
+// replace "-" with "_" in name
+func ReplaceHyphenWithUnderscore(name string) string {
+	return strings.ReplaceAll(name, "-", "_")
+}

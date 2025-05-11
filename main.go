@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	arg "github.com/alexflint/go-arg"
@@ -23,7 +22,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	c := compiler.NewCompilerFromArgs(CmdArgs)
+	compiler.NewCompilerFromArgs(CmdArgs)
 	// gosf := compiler.BuildGoSourceFile("./tests/_ast.go")
 
 	// _, err := types.CheckSourceFile(gosf)
@@ -31,5 +30,5 @@ func main() {
 	// 	log.Fatal(err) // type error
 	// }
 
-	fmt.Printf("Files: %d\n", len(c.Files))
+	// fmt.Printf("Files: %d\n", len(c.Files))
 }
