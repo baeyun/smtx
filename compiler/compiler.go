@@ -128,7 +128,7 @@ func (c *Compiler) CompileSourceFile(filename string) {
 			&ast.ExprStmt{
 				X: &ast.CallExpr{
 					Fun: &ast.Ident{
-						Name:    "foo",
+						Name:    utils.ToPascalCase("check-sat"),
 						NamePos: token.Pos(1),
 					},
 				},

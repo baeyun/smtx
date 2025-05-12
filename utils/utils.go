@@ -133,3 +133,17 @@ func PrettySExp(input string) string {
 func ReplaceHyphenWithUnderscore(name string) string {
 	return strings.ReplaceAll(name, "-", "_")
 }
+
+func ToPascalCase(s string) string {
+	words := strings.FieldsFunc(s, func(r rune) bool {
+		return r == '-' || r == '_'
+	})
+
+	for i, word := range words {
+		if len(word) > 0 {
+			words[i] = strings.ToUpper(string(word[0])) + word[1:]
+		}
+	}
+
+	return strings.Join(words, "")
+}
