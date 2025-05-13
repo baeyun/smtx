@@ -54,3 +54,11 @@ func WalkParser(node *ts.Node, callback func(node *ts.Node)) {
 		}
 	}
 }
+
+func GetSrcByRange(src []byte, node *ts.Node) string {
+	start, end := node.StartByte(), node.EndByte()
+	if start == end {
+		return ""
+	}
+	return string(src[start:end])
+}

@@ -123,25 +123,16 @@ func (c *Compiler) CompileSourceFile(filename string) {
 		}
 	})
 
-	// add main function
-	mainFunc := BuildMainFunction(&ast.BlockStmt{
-		List: []ast.Stmt{
-			&ast.ExprStmt{
-				X: &ast.CallExpr{
-					Fun: &ast.Ident{
-						Name:    utils.ToPascalCase("check-sat"),
-						NamePos: token.Pos(97),
-					},
-				},
-			},
-		},
-	})
+	cmds := BuildCommands(&sf.Src, sf.Parser.RootNode())
+	mainFunc := BuildMainFunction(&cmds)
+	// sf.Ast.Decls = append(sf.Ast.Decls, topLevelDelcs...)
 	sf.Ast.Decls = append(sf.Ast.Decls, mainFunc)
 
-	// BuildCommands(sf.Parser.RootNode())
-	ast.PrintAst(sf.Ast)
-	ast.PrintSourceFile(sf)
+	// ast.PrintAst(sf.Ast)
+	// ast.PrintSourceFile(sf)
+	// ast.PrettyPrintParser(sf)
 	c.Files = append(c.Files, sf)
+	// c.CheckTypes()
 
 	// @TODO: !important: prevent leaks
 	// defer sf.Parser.Close()

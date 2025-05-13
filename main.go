@@ -21,8 +21,8 @@ func main() {
 			os.Exit(0)
 		}
 
-		c := compiler.NewCompilerFromArgs(args)
-		c.CheckTypes()
+		compiler.NewCompilerFromArgs(args)
+		// c.CheckTypes()
 
 	default:
 		argParser.WriteUsage(os.Stderr)

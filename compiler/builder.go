@@ -53,49 +53,60 @@ func BuildGoSourceFile(filename string) *ast.SourceFile {
 	return sf
 }
 
-func BuildMainFunction(body *ast.BlockStmt) *ast.FuncDecl {
-	if body == nil {
-		body = &ast.BlockStmt{}
+func BuildMainFunction(stmts *[]ast.Stmt) *ast.FuncDecl {
+	if stmts == nil {
+		stmts = &[]ast.Stmt{}
 	}
 
 	return &ast.FuncDecl{
 		Name: &ast.Ident{Name: "main"},
 		Type: &ast.FuncType{Params: &ast.FieldList{}},
-		Body: body,
+		Body: &ast.BlockStmt{
+			List: *stmts,
+		},
 	}
 }
 
-func BuildCommands(root *ts.Node) []ast.Decl {
-	var decls []ast.Decl
+func BuildCommands(src *[]byte, root *ts.Node) []ast.Stmt {
+	var stmts []ast.Stmt
 	cursor := root.Walk()
 
 	defer cursor.Close()
 
 	for _, node := range root.Children(cursor) {
-		if child := node.NamedChild(0); child != nil {
-			println(child.Kind())
+		println(parser.GetSrcByRange(*src, node.NamedChild(0)))
+		if namedChild := node.NamedChild(0); namedChild != nil {
+			switch namedChild.Kind() {
+			case "symbol":
+				// stmts = append(stmts, BuildCallExpr(&node))
+				// println(namedChild.Kind())
+			case "term":
+				println(namedChild.NamedChild(0).Kind())
+				println(parser.GetSrcByRange(*src, namedChild))
+				println(parser.GetSrcByRange(*src, namedChild.Child(0)))
+				println(parser.GetSrcByRange(*src, namedChild.NamedChild(0)))
+				// stmts = append(stmts, BuildCallExpr(&node))
+			default:
+				fmt.Printf("Unknown node: %s\n", namedChild.Kind())
+			}
 		} else {
-			// no child
-			println("no child")
+			// @TODO: test: unnamed, probably a call expression
+			stmts = append(stmts, BuildCallExpr(&node))
 		}
 	}
 
-	return decls
+	return stmts
 }
 
-// func BuildCommandSimple(node *ts.Node) ast.Decl {
-// 	name = utils.ReplaceHyphenWithUnderscore(node.Child(1).Kind())
-// 	print("no child: ")
-// 	println(name)
+func BuildCallExpr(node *ts.Node) ast.Stmt {
+	funcExprName := utils.ToPascalCase(node.Child(1).Kind())
 
-// 	return &ast.FuncDecl{
-// 		Name: &ast.Ident{
-// 			Name: name,
-// 		},
-// 		Type: &ast.FuncType{
-// 			Params: &ast.FieldList{},
-// 			Results: &ast.FieldList{},
-// 		},
-// 		Body: &ast.BlockStmt{},
-// 	}
-// }
+	return &ast.ExprStmt{
+		X: &ast.CallExpr{
+			Fun: &ast.Ident{
+				Name:    funcExprName,
+				NamePos: token.Pos(node.StartByte()),
+			},
+		},
+	}
+}
