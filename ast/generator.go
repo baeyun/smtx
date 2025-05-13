@@ -30,6 +30,7 @@ func GenerateFile(sf *SourceFile, filename *string) {
 }
 
 func PrintAst(Ast *File) {
+	utils.PrintSectionHeader("AST")
 	if Ast == nil {
 		panic("AST is nil")
 	}
@@ -39,6 +40,7 @@ func PrintAst(Ast *File) {
 }
 
 func PrintSourceFile(sf *SourceFile) {
+	utils.PrintSectionHeader("Source File")
 	fmt.Println(Generate(sf))
 }
 

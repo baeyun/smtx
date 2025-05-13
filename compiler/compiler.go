@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/token"
 	"log"
+	"os"
 
 	gast "go/ast"
 
@@ -129,7 +130,7 @@ func (c *Compiler) CompileSourceFile(filename string) {
 				X: &ast.CallExpr{
 					Fun: &ast.Ident{
 						Name:    utils.ToPascalCase("check-sat"),
-						NamePos: token.Pos(1),
+						NamePos: token.Pos(97),
 					},
 				},
 			},
@@ -138,11 +139,8 @@ func (c *Compiler) CompileSourceFile(filename string) {
 	sf.Ast.Decls = append(sf.Ast.Decls, mainFunc)
 
 	// BuildCommands(sf.Parser.RootNode())
-	// println("############################################################")
 	ast.PrintAst(sf.Ast)
-	println("############################################################")
 	ast.PrintSourceFile(sf)
-
 	c.Files = append(c.Files, sf)
 
 	// @TODO: !important: prevent leaks
@@ -151,11 +149,12 @@ func (c *Compiler) CompileSourceFile(filename string) {
 
 // @TODO: check for types for all
 func (c *Compiler) CheckTypes() {
-	println("############################################################")
+	utils.PrintSectionHeader("Check Types")
 	for _, sf := range c.Files {
 		_, err := types.CheckSourceFile(sf)
 		if err != nil {
 			log.Fatal(err)
+			os.Exit(0)
 		}
 	}
 

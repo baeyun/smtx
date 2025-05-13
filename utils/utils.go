@@ -147,3 +147,14 @@ func ToPascalCase(s string) string {
 
 	return strings.Join(words, "")
 }
+
+// write a function that prints a line to the console like this:
+func PrintSectionHeader(title string) {
+	// calculate the number of stars needed
+	numStars := 60 - len(title) - 3
+	if numStars < 0 {
+		numStars = 0
+	}
+	stars := strings.Repeat("*", numStars)
+	fmt.Printf("/** %s %s/\n", title, stars)
+}
