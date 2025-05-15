@@ -74,17 +74,17 @@ func BuildCommands(src *[]byte, root *ts.Node) []ast.Stmt {
 	defer cursor.Close()
 
 	for _, node := range root.Children(cursor) {
-		println(parser.GetSrcByRange(*src, node.NamedChild(0)))
+		// println(parser.GetSrcByRange(*src, node.NamedChild(0)))
 		if namedChild := node.NamedChild(0); namedChild != nil {
 			switch namedChild.Kind() {
 			case "symbol":
 				// stmts = append(stmts, BuildCallExpr(&node))
 				// println(namedChild.Kind())
 			case "term":
-				println(namedChild.NamedChild(0).Kind())
-				println(parser.GetSrcByRange(*src, namedChild))
-				println(parser.GetSrcByRange(*src, namedChild.Child(0)))
-				println(parser.GetSrcByRange(*src, namedChild.NamedChild(0)))
+				// println(namedChild.NamedChild(0).Kind())
+				// println(parser.GetSrcByRange(*src, namedChild))
+				// println(parser.GetSrcByRange(*src, namedChild.Child(0)))
+				// println(parser.GetSrcByRange(*src, namedChild.NamedChild(0)))
 				// stmts = append(stmts, BuildCallExpr(&node))
 			default:
 				fmt.Printf("Unknown node: %s\n", namedChild.Kind())
