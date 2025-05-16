@@ -130,7 +130,7 @@ func (c *Compiler) CompileSourceFile(filename string) {
 
 	// ast.PrintAst(sf.Ast)
 	// ast.PrintSourceFile(sf)
-	ast.PrettyPrintParser(sf)
+	// ast.PrettyPrintParser(sf)
 	// c.Files = append(c.Files, sf)
 	// c.CheckTypes()
 

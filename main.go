@@ -7,6 +7,7 @@ import (
 
 	"github.com/smtx/compiler"
 	"github.com/smtx/config"
+	"github.com/smtx/parser"
 )
 
 var args config.CmdArgs
@@ -25,6 +26,8 @@ func main() {
 		// c.CheckTypes()
 
 	default:
-		argParser.WriteUsage(os.Stderr)
+		// argParser.WriteUsage(os.Stderr)
+		parser.TestBindings()
 	}
+
 }
