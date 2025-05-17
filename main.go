@@ -29,5 +29,4 @@ func main() {
 		// argParser.WriteUsage(os.Stderr)
 		parser.TestBindings()
 	}
-
 }

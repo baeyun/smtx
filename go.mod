@@ -7,7 +7,10 @@ require (
 	github.com/alecthomas/repr v0.4.0 // indirect
 	github.com/alexflint/go-arg v1.5.1 // indirect
 	github.com/alexflint/go-scalar v1.2.0 // indirect
+	github.com/ashish-sjc/flexbuffers v0.0.0-20240611081427-91619cf93381 // indirect
+	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
+	github.com/google/flatbuffers v25.2.10+incompatible // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-pointer v0.0.1 // indirect
