@@ -1,12 +1,12 @@
-# SMTV: A Robust SMT-LIB Static Validator
+# SMTX: A Robust SMT-LIB Static Validator
 
-The Satisfiability Modulo Theories Type-checker (SMTV) is a specialized type checker built on Golang’s type system that performs precise and efficient validation of SMT-LIB2 logical formulas.
+The Satisfiability Modulo Theories Type-checker (SMTX) is a specialized type checker built on Golang’s type system that performs precise and efficient validation of SMT-LIB2 logical formulas.
 
-SMTV is part of a larger project, SMTX, that focuses on improving SMT solving using static analysis and _pre-solver_ tools.
+SMTX is part of a larger project, SMTX, that focuses on improving SMT solving using static analysis and _pre-solver_ tools.
 
 ## Implementation
 
-SMTV is implemented in Go, leveraging its strong type system and efficient compilation. The implementation focuses on:
+SMTX is implemented in Go, leveraging its strong type system and efficient compilation. The implementation focuses on:
 
 - Type-safe validation of SMT-LIB2 (v2.6) expressions
 - Efficient memory management using Go's garbage collection
@@ -23,4 +23,4 @@ The core architecture consists of:
 
 ## Publications
 
-- @TODO [SMTV: Pathway to A Robust SMT-LIB Static Validator](#)
+- @TODO [SMTX: Pathway to A Robust SMT-LIB Static Validator](#)
