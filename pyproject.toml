@@ -1,0 +1,22 @@
+[project]
+name = "smtx"
+version = "0.1.0"
+description = "A Robust SMT-LIB Static Validator"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.urls]
+repository = "https://github.com/baeyun/smtx"
+
+
+[tool.pyrefly]
+python_interpreter = "C:/Users/bukha/AppData/Local/Programs/Python/Python311/python.exe"
+# site_package_path = 
+# python_platform = 
+# python_version = "3.11.9"
+project_excludes = ["**/.[!/.]*", "**/*venv/**", "**/target/**"]
+search_path = ["std"]
+
+[tool.ruff.lint]
+ignore = ["ALL"]

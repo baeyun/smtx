@@ -1,0 +1,13 @@
+[package]
+name = "smtx_lib"
+version = "0.1.0"
+edition = "2024"
+
+# Setting publish to false prevents the accidental publishing
+# of your code to (the public) crates.io, as described here:
+#
+# https://doc.rust-lang.org/cargo/reference/manifest.html#the-publish--field-optional
+publish = false
+
+[dependencies]
+aws-smt-ir = "0.3.0"

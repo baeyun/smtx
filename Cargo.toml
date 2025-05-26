@@ -1,0 +1,22 @@
+[package]
+name = "smtx"
+version = "0.1.0"
+edition = "2024"
+description = "A Robust SMT-LIB Static Validator"
+
+# Setting publish to false prevents the accidental publishing
+# of your code to (the public) crates.io, as described here:
+#
+# https://doc.rust-lang.org/cargo/reference/manifest.html#the-publish--field-optional
+publish = false
+
+[workspace.package]
+license = "MIT"
+repository = "https://github.com/baeyun/smtx"
+
+[profile.release]
+lto = true
+
+[dependencies]
+smtx_lib = { path = "./lib" }
+clap = { version = "4.5.31", features = ["derive"]}
